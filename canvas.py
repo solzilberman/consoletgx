@@ -12,8 +12,11 @@ dots = ((0x01, 0x08),
 # fmt: on
 
 
-for y in range(0,5):
-    for x in range(0,5):
-        grid[y//4][x//2] |= dots[y%4][x%2]
+for y in range(0, 5):
+    for x in range(0, 5):
+        grid[y // 4][x // 2] |= dots[y % 4][x % 2]
 
 print([[chr(x) for x in row] for row in grid])
+
+for i in range(15):
+    print(i % 4, i // 4)
