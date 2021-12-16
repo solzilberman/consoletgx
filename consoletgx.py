@@ -24,7 +24,7 @@ class ConsoleTGX:
         self.bheight = self.height * 4
         self.size = self.width * self.height
         self.bsize = self.bwidth * self.bheight
-        self.fill = 0
+        self.fill = 3
         self.BUFFER = [[0x2800 for _ in range(self.width)] for _ in range(self.height)]
         self.bg_color = 0
         curses.curs_set(0)
@@ -62,15 +62,17 @@ if __name__ == "__main__":
     sc = ConsoleTGX()
     off = 0
     try:
+        p1 = shapes.Point(50, 25)
+        p2 = shapes.Point(65, 25)
+        p3 = shapes.Point(50, 40)
+        tri = shapes.Triangle(p1, p2, p3)
+        poly = shapes.Polygon(shapes.Point(30, 30), 4, 25)
         while True:
-            off += 1
             sc.clear()
-            p1 = shapes.Point(25 + off, 25)
-            p2 = shapes.Point(40 + off, 25)
-            p3 = shapes.Point(25 + off, 40)
-            tri = shapes.Triangle(p1, p2, p3)
+            poly.rotate(PI / 8)
+            poly.draw(sc)
             tri.draw(sc)
-            sc.update(0.5)
+            sc.update(0.01)
     except KeyboardInterrupt:
         curses.endwin()
         print("exit sig recieved!")
