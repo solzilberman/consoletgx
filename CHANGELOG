@@ -1,0 +1,11 @@
+12.16.21
+--------
+[x] View, Projection Matrix
+[x] linear algebra library
+[x] camera object with view matrix 
+[x] spinning cube
+----------------------------------------
+12.16.21
+--------
+[x] Triangle Rasterizer
+[x] Polygon builder from triangles

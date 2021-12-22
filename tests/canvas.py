@@ -9,7 +9,6 @@ curses.init_pair(1, 1, 0)
 curses.init_pair(2, 2, 0)
 curses.init_pair(3, 3, 0)
 curses.init_pair(4, 4, 0)
-print(width, height)
 try:
     while 1:
         screen.addnstr(0, 226, "hello", width - 226, curses.color_pair(1))

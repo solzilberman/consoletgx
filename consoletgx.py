@@ -2,8 +2,12 @@
 import curses, random
 import time
 import random
-import shapes
+from shapes import *
 import math
+from camera import *
+from linalg import *
+from sshkeyboard import listen_keyboard
+
 
 PI = math.pi
 # fmt: off
@@ -29,10 +33,12 @@ class ConsoleTGX:
         self.bg_color = 0
         curses.curs_set(0)
         curses.start_color()
-        curses.init_pair(1, 1, 0)
-        curses.init_pair(2, 2, 0)
-        curses.init_pair(3, 3, 0)
-        curses.init_pair(4, 4, 0)
+        curses.use_default_colors()
+        self.screen.keypad(1)
+        # curses.init_pair(1, 1, 0)
+        # curses.init_pair(2, 2, 0)
+        # curses.init_pair(3, 3, 0)
+        # curses.init_pair(4, 4, 0)
         self.objs = []
         self.screen.clear
 
@@ -43,12 +49,13 @@ class ConsoleTGX:
                 y,
                 0,
                 "".join(list(map(lambda x: chr(x), self.BUFFER[y]))),
-                curses.color_pair(self.fill),
+                curses.color_pair(4),
             )
 
-        c = self.screen.getch()
+        c = sc.screen.getch()
         if c == 3:
             raise KeyboardInterrupt
+
         self.screen.refresh()
         time.sleep(ms)
         return
@@ -60,19 +67,45 @@ class ConsoleTGX:
 
 if __name__ == "__main__":
     sc = ConsoleTGX()
+    camera = Camera(vec3(0, 15, 15))
     off = 0
+    camera.get_view(debug=True)
     try:
-        p1 = shapes.Point(50, 25)
-        p2 = shapes.Point(65, 25)
-        p3 = shapes.Point(50, 40)
-        tri = shapes.Triangle(p1, p2, p3)
-        poly = shapes.Polygon(shapes.Point(30, 30), 4, 25)
+        with open("./tests/cube.obj", "r") as f:
+            data = f.read().splitlines()
+
+        tri = []
+        for i in range(0, len(data) - 2, 3):
+            curr = []
+            for j in range(3):
+                av = list(
+                    filter(
+                        lambda s: type(s) == float,
+                        map(lambda s: float(s) if len(s) > 0 else int(0), data[i + j].split(",")),
+                    )
+                )
+                curr.append(vec4(av[0], av[1], av[2], 1))
+
+            tri.append(Triangle3(curr[0], curr[1], curr[2], MODE="LINE"))
+
+        # poly = Polygon(Point(25, 25), 5, 15, "LINE")
+        off = 15
+        for t in tri:
+            t.rotate(off, "y")
         while True:
             sc.clear()
-            poly.rotate(PI / 8)
-            poly.draw(sc)
-            tri.draw(sc)
-            sc.update(0.01)
+            # pp.rotate(PI / 8)
+            for t in tri:
+                t.rotate(off, "y")
+                t.draw(sc, camera)
+            sc.update(0.25)
+            c = sc.screen.getch()
+
+            if c == 3:
+                raise KeyboardInterrupt
+            elif c == 259:
+                camera.translate(vec3(0, 0, 5))
+                # camera.get_view(debug=True)
     except KeyboardInterrupt:
         curses.endwin()
         print("exit sig recieved!")
