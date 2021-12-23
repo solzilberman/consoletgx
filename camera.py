@@ -9,25 +9,14 @@ class Camera:
         self.forward = vec3(0, -self.eye.y, -self.eye.z)
         self.view = [[0 for i in range(4)] for j in range(4)]
         self.target = vec3(0, 0, 0)
+        self.light_pos = vec4(0, 15, -15, 0)
         self.look_at(self.target)
 
     def look_at(self, target):
-        # print(f"forward: {self.forward.x}, {self.forward.y}, {self.forward.z}")
         self.target = target
         self.forward = normalize(self.eye - self.target)
         self.up = cross(self.forward, self.right)
         self.right = normalize(cross(self.up, self.forward))
-        # print self.right
-        # print(f"right: {self.right.x}, {self.right.y}, {self.right.z}")
-        # print(f"up: {self.up.x}, {self.up.y}, {self.up.z}")
-        # generate view matrix
-        # self.view = [
-        #     vec4(self.right.x, self.right.y, self.right.z, -dot(self.right, self.eye)),
-        #     vec4(self.up.x, self.up.y, self.up.z, -dot(self.up, self.eye)),
-        #     vec4(-self.forward.x, -self.forward.y, -self.forward.z, -dot(self.forward, self.eye)),
-        #     vec4(0.0, 0.0, 0.0, 1),
-        # ]
-        # print(f"forward: {self.forward.x}, {self.forward.y}, {self.forward.z}")
 
         self.view = [
             vec4(self.right.x, self.up.x, -self.forward.x, 0),
@@ -35,13 +24,6 @@ class Camera:
             vec4(self.right.z, self.up.z, -self.forward.z, 0),
             vec4(-dot(self.right, self.eye), -dot(self.up, self.eye), -dot(self.forward, self.eye), 1.0),
         ]
-
-        # self.view = [
-        #     vec4(0.707107, -0.331295, 0.624695, 0),
-        #     vec4(0, 0.883452, 0.468521, 0),
-        #     vec4(-0.707107, -0.331295, 0.624695, 0),
-        #     vec4(-1.63871, -5.747777, -40.400412, 1),
-        # ]
 
     def get_view(self, debug=False):
         if debug:
@@ -52,6 +34,9 @@ class Camera:
             print(f"{self.view[3].x},{self.view[3].y},{self.view[3].z}, {self.view[3].w}")
             print("=================================================================")
         return self.view
+
+    def move_light(self, v):
+        self.light_pos += v
 
     def translate(self, v4):
         self.eye += v4
