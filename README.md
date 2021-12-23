@@ -37,6 +37,8 @@ if __name__ == "__main__":
 ```
 
 Examples:
+Spinning Cube
 ![Spinning Cube](https://i.imgur.com/BIxVB1f.gif)
 
+Sphere + Basic Lighting Model
 ![Sphere with lighting](https://i.imgur.com/zA7iDcJ.gif)
