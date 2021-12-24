@@ -1,16 +1,16 @@
 ﻿# ConsoleTGX
 #### 3D Graphics Engine in your terminal.
 
-Installation:
+**Installation**:
 
     git clone https://github.com/solzilberman/consoletgx
 
-Run Examples:
+**Run Examples**:
 
     mv ./examples/3dsphere.py .
     python 3dsphere.py
 
-Basic Usage
+**Basic Usage:**
 ```
 from consoletgx import *
 
@@ -35,8 +35,10 @@ if __name__ == "__main__":
         print("exit sig recieved!")
 
 ```
+**Documentation:** [docs](solzilberman.github.io/consoletgx)</br>
+</br>
 
-Examples:
+**Examples:**
 
 Spinning Cube
 
