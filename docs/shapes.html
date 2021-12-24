@@ -107,6 +107,9 @@
                         <li>
                                 <a class="function" href="#Triangle3.rotate">rotate</a>
                         </li>
+                        <li>
+                                <a class="function" href="#Triangle3.scale">scale</a>
+                        </li>
                 </ul>
 
             </li>
@@ -146,17 +149,27 @@ shapes    </h1>
 <span class="kn">from</span> <span class="nn">linalg</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">camera</span> <span class="kn">import</span> <span class="o">*</span>
 
+<span class="n">__docformat__</span> <span class="o">=</span> <span class="s2">&quot;google&quot;</span>
+
 
 <span class="k">def</span> <span class="nf">euclid_distance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
-    <span class="c1"># return euclidian distance between 2 3d points</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return euclidian distance between 2 3d points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">z</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">area_triangle</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds area of a triangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">lighting</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">light_pos</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates lighting based on vertex position, normal and light position</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># https://www.scratchapixel.com/code.php?id=26&amp;origin=/lessons/3d-basic-rendering/rasterization-practical-implementation</span>
     <span class="n">light_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">light_pos</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
     <span class="n">diff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">light_dir</span><span class="p">))</span>
@@ -165,6 +178,9 @@ shapes    </h1>
 
 
 <span class="k">def</span> <span class="nf">_rasterize</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">cam</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts point from camera space to screen space</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">f</span> <span class="o">=</span> <span class="mi">100</span>
     <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">scale</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="mi">75</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span>
@@ -192,6 +208,9 @@ shapes    </h1>
 
 
 <span class="k">def</span> <span class="nf">_to_screen_space</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">sc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts from camera space to screen space</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">half_w</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">bwidth</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">half_h</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">bheight</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">x_screen</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">sc</span><span class="o">.</span><span class="n">bwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">half_w</span> <span class="o">+</span> <span class="n">half_w</span><span class="p">))</span>
@@ -200,6 +219,9 @@ shapes    </h1>
 
 
 <span class="k">def</span> <span class="nf">_line_factory</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns array of points on the line between [p1,p2]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
     <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
     <span class="n">xd</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span>
@@ -220,6 +242,9 @@ shapes    </h1>
 
 
 <span class="k">def</span> <span class="nf">_inside_triangle</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if a point is inside a triangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># https://en.wikipedia.org/wiki/Barycentric_coordinate_system</span>
     <span class="n">w1</span> <span class="o">=</span> <span class="p">((</span><span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
         <span class="p">(</span><span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
@@ -232,11 +257,30 @@ shapes    </h1>
 
 
 <span class="k">class</span> <span class="nc">Point</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    2D Point representing pixel in screen space</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x,y : coordinates of point</span>
+<span class="sd">        (OR)</span>
+<span class="sd">        v   : vec2, vec3, vec4 where v.x, v.y are coordinates in screen space</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw point at self.x, self.y in terminal</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc               : screen object</span>
+<span class="sd">            (optional) col   : color of point</span>
+<span class="sd">            (optional) depth : depth of 3d point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bheight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">sc</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]:</span>
@@ -350,6 +394,14 @@ shapes    </h1>
 
 
 <span class="k">class</span> <span class="nc">Triangle3</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    3D Triangle class</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        p1, p2, p3: vec4 vertices of triangle</span>
+<span class="sd">        normal: vec4 normal of triangle</span>
+<span class="sd">        MODE: drawing mode, &quot;FILL&quot; or &quot;LINE&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">normal</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span>
@@ -358,7 +410,12 @@ shapes    </h1>
         <span class="bp">self</span><span class="o">.</span><span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the triangle on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="n">v1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
@@ -406,6 +463,9 @@ shapes    </h1>
                         <span class="n">pcurr</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotates self.p1, self.p2,self.p3 around axis by theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">rotateY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -421,16 +481,42 @@ shapes    </h1>
             <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+
 
 <span class="k">class</span> <span class="nc">Sphere</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">cz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">cx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">cy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">cz</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    3D Sphere Object</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        center : center of the sphere</span>
+<span class="sd">        radius : radius of the sphere</span>
+<span class="sd">        MODE   : mode of drawing, &quot;FILL&quot; or &quot;LINE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cw</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MODE</span> <span class="o">=</span> <span class="n">MODE</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the sphere on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="c1"># http://www.songho.ca/opengl/gl_sphere.html</span>
         <span class="n">sector_count</span> <span class="o">=</span> <span class="mi">50</span>
@@ -476,13 +562,17 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">euclid_distance</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">):</span>
-    <span class="c1"># return euclidian distance between 2 3d points</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return euclidian distance between 2 3d points</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">z</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>return euclidian distance between 2 3d points</p>
+</div>
+
 
                 </section>
                 <section id="area_triangle">
@@ -496,12 +586,17 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">area_triangle</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Finds area of a triangle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">abs</span><span class="p">((</span><span class="n">p1</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">p1</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p2</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p2</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p3</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">p3</span><span class="o">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">p1</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Finds area of a triangle</p>
+</div>
+
 
                 </section>
                 <section id="lighting">
@@ -515,6 +610,9 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">lighting</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">light_pos</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates lighting based on vertex position, normal and light position</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># https://www.scratchapixel.com/code.php?id=26&amp;origin=/lessons/3d-basic-rendering/rasterization-practical-implementation</span>
     <span class="n">light_dir</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">light_pos</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span>
     <span class="n">diff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">light_dir</span><span class="p">))</span>
@@ -524,7 +622,9 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>Calculates lighting based on vertex position, normal and light position</p>
+</div>
+
 
                 </section>
                 <section id="Point">
@@ -539,11 +639,30 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Point</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    2D Point representing pixel in screen space</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        x,y : coordinates of point</span>
+<span class="sd">        (OR)</span>
+<span class="sd">        v   : vec2, vec3, vec4 where v.x, v.y are coordinates in screen space</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw point at self.x, self.y in terminal</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc               : screen object</span>
+<span class="sd">            (optional) col   : color of point</span>
+<span class="sd">            (optional) depth : depth of 3d point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bheight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">sc</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]:</span>
@@ -554,20 +673,34 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>2D Point representing pixel in screen space</p>
+
+<h6 id="attributes">Attributes</h6>
+
+<ul>
+<li><strong>x,y :</strong>  coordinates of point</li>
+<li>(OR)</li>
+<li><strong>v   :</strong>  vec2, vec3, vec4 where v.x, v.y are coordinates in screen space</li>
+</ul>
+</div>
+
 
                             <div id="Point.__init__" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#Point.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Point</span><span class="signature">(x, y)</span>
+            <span class="name">Point</span><span class="signature">(*argv)</span>
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 
         </details>
@@ -586,6 +719,13 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw point at self.x, self.y in terminal</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc               : screen object</span>
+<span class="sd">            (optional) col   : color of point</span>
+<span class="sd">            (optional) depth : depth of 3d point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bwidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sc</span><span class="o">.</span><span class="n">bheight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">sc</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)]:</span>
@@ -596,7 +736,17 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>Draw point at self.x, self.y in terminal</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<blockquote>
+  <p>sc               : screen object
+  (optional) col   : color of point
+  (optional) depth : depth of 3d point</p>
+</blockquote>
+</div>
+
 
                             </div>
                 </section>
@@ -987,6 +1137,14 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Triangle3</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    3D Triangle class</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        p1, p2, p3: vec4 vertices of triangle</span>
+<span class="sd">        normal: vec4 normal of triangle</span>
+<span class="sd">        MODE: drawing mode, &quot;FILL&quot; or &quot;LINE&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">normal</span><span class="o">=</span><span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span>
@@ -995,7 +1153,12 @@ shapes    </h1>
         <span class="bp">self</span><span class="o">.</span><span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the triangle on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="n">v1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
@@ -1043,6 +1206,9 @@ shapes    </h1>
                         <span class="n">pcurr</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotates self.p1, self.p2,self.p3 around axis by theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">rotateY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1057,11 +1223,32 @@ shapes    </h1>
             <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>3D Triangle class</p>
+
+<h6 id="attributes">Attributes</h6>
+
+<ul>
+<li><strong>p1, p2, p3:</strong>  vec4 vertices of triangle</li>
+<li><strong>normal:</strong>  vec4 normal of triangle</li>
+<li><strong>MODE:</strong>  drawing mode, "FILL" or "LINE"</li>
+</ul>
+</div>
+
 
                             <div id="Triangle3.__init__" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#Triangle3.__init__">#&nbsp;&nbsp</a>
@@ -1096,7 +1283,12 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the triangle on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="n">v1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_view</span><span class="p">()))</span>
@@ -1146,7 +1338,16 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>Draws the triangle on the screen</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<blockquote>
+  <p>sc : screen object
+  c  : camera object</p>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="Triangle3.rotate" class="classattr">
@@ -1160,6 +1361,9 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">rotate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotates self.p1, self.p2,self.p3 around axis by theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">rotateY</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
@@ -1174,6 +1378,35 @@ shapes    </h1>
             <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">rotateZ</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Rotates self.p1, self.p2,self.p3 around axis by theta</p>
+</div>
+
+
+                            </div>
+                            <div id="Triangle3.scale" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Triangle3.scale">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">scale</span><span class="signature">(self, factor)</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p1</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p2</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p3</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1194,14 +1427,29 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Sphere</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">cz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">cx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">cy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">cz</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    3D Sphere Object</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        center : center of the sphere</span>
+<span class="sd">        radius : radius of the sphere</span>
+<span class="sd">        MODE   : mode of drawing, &quot;FILL&quot; or &quot;LINE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cw</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MODE</span> <span class="o">=</span> <span class="n">MODE</span>
 
     <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the sphere on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="c1"># http://www.songho.ca/opengl/gl_sphere.html</span>
         <span class="n">sector_count</span> <span class="o">=</span> <span class="mi">50</span>
@@ -1235,21 +1483,32 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>3D Sphere Object</p>
+
+<h6 id="attributes">Attributes</h6>
+
+<ul>
+<li><strong>center :</strong>  center of the sphere</li>
+<li><strong>radius :</strong>  radius of the sphere</li>
+<li><strong>MODE   :</strong>  mode of drawing, "FILL" or "LINE</li>
+</ul>
+</div>
+
 
                             <div id="Sphere.__init__" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#Sphere.__init__">#&nbsp;&nbsp</a>
 
         
-            <span class="name">Sphere</span><span class="signature">(cx, cy, cz, radius, MODE=&#39;FILL&#39;)</span>
+            <span class="name">Sphere</span><span class="signature">(c, radius, MODE=&#39;FILL&#39;)</span>
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">cz</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">cx</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">cy</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">cz</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">MODE</span><span class="o">=</span><span class="s2">&quot;FILL&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cz</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cw</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">w</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MODE</span> <span class="o">=</span> <span class="n">MODE</span>
 </pre></div>
@@ -1270,6 +1529,12 @@ shapes    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sc</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the sphere on the screen</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            sc : screen object</span>
+<span class="sd">            c  : camera object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># world space -&gt; camera space</span>
         <span class="c1"># http://www.songho.ca/opengl/gl_sphere.html</span>
         <span class="n">sector_count</span> <span class="o">=</span> <span class="mi">50</span>
@@ -1303,7 +1568,16 @@ shapes    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>Draws the sphere on the screen</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<blockquote>
+  <p>sc : screen object
+  c  : camera object</p>
+</blockquote>
+</div>
+
 
                             </div>
                 </section>

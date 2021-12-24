@@ -1,7 +1,15 @@
 from linalg import *
 
+__docformat__ = "google"
+
 
 class Camera:
+    """
+    Virtual Camera class for 3D graphics.
+    Attributes:
+        eye: vec3, position of the camera in world space
+    """
+
     def __init__(self, eye):
         self.eye = eye
         self.up = vec3(0, 1, 0)
@@ -13,6 +21,9 @@ class Camera:
         self.look_at(self.target)
 
     def look_at(self, target):
+        """
+        Update cameras view matrix based on current camera position and target.
+        """
         self.target = target
         self.forward = normalize(self.eye - self.target)
         self.up = cross(self.forward, self.right)
@@ -26,6 +37,9 @@ class Camera:
         ]
 
     def get_view(self, debug=False):
+        """
+        Get current view matrix.
+        """
         if debug:
             print("VIEW MATRIX:")
             print(f"{self.view[0].x},{self.view[0].y},{self.view[0].z}, {self.view[0].w}")
@@ -36,14 +50,26 @@ class Camera:
         return self.view
 
     def translate_light(self, v):
+        """
+        Translate the light position by vec4 v.
+        """
         self.light_pos += v
 
-    def translate_eye(self, v4):
-        self.eye += v4
+    def translate_eye(self, v3):
+        """
+        Translate the camera position by vec3 v.
+        """
+        self.eye += v3
         self.look_at(self.target)
 
     def get_eye(self):
+        """
+        Returns current camera position in world space.
+        """
         return self.eye
 
     def get_light(self):
+        """
+        Returns current light position in world space.
+        """
         return self.light_pos

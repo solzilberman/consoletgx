@@ -8,6 +8,8 @@ from camera import *
 from linalg import *
 from obj_loader import *
 
+__docformat__ = "google"
+
 PI = math.pi
 # fmt: off
 dots = ((0x01, 0x08),
@@ -18,6 +20,10 @@ dots = ((0x01, 0x08),
 
 
 class ConsoleTGX:
+    """
+    Class for controlling terminal display through ConsoleTGX object.
+    """
+
     def __init__(self):
         self.dots = dots
         self.screen = curses.initscr()
@@ -42,7 +48,12 @@ class ConsoleTGX:
         self.objs = []
         self.screen.clear
 
-    def update(self, ms):
+    def update(self, s):
+        """
+        Updates the screen with the contents of the buffers.
+        Parameters:
+            s: seconds for update interval. 1/3 for 30fps.
+        """
         self.screen.nodelay(1)
         for y in range(self.height - 1):
             for x in range(self.width - 1):
@@ -58,15 +69,21 @@ class ConsoleTGX:
             raise KeyboardInterrupt
 
         self.screen.refresh()
-        time.sleep(ms)
+        time.sleep(s)
         return
 
     def clear(self):
+        """
+        Clears the screen and all buffers.
+        """
         self.BUFFER = [[0x2800 for _ in range(self.width)] for _ in range(self.height)]
         self.COLOR_BUFFER = [[240 for _ in range(self.width)] for _ in range(self.height)]
         self.DEPTH_BUFFER = [[-100 for _ in range(self.width)] for _ in range(self.height)]
         self.screen.erase()
 
     def exit(self):
+        """
+        Clean up method to exit the program.
+        """
         curses.endwin()
         print("exit sig recieved!")

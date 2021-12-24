@@ -1,6 +1,8 @@
 import copy
 import math
 
+__docformat__ = "google"
+
 
 class ShapeError(Exception):
     def __init__(self, a, b, f):
@@ -15,6 +17,10 @@ class ShapeError(Exception):
 
 
 class vec2:
+    """
+    Class for 2D vectors.
+    """
+
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -33,6 +39,10 @@ class vec2:
 
 
 class vec3:
+    """
+    Class for 3D vectors.
+    """
+
     def __init__(self, x=0, y=0, z=0):
         self.x = x
         self.y = y
@@ -54,6 +64,10 @@ class vec3:
 
 
 class vec4:
+    """
+    Class object for 4D vectors (quaternion).
+    """
+
     def __init__(self, x=0, y=0, z=0, w=0):
         self.x = x
         self.y = y
@@ -77,6 +91,9 @@ class vec4:
 
 
 def dot(v1, v2):
+    """
+    Returns dot product between two vectors v1, v2.
+    """
     if v1.dim != v2.dim:
         raise ShapeError(v1, v2, "dot")
     if v1.dim == 4:
@@ -86,6 +103,9 @@ def dot(v1, v2):
 
 
 def transpose(m):
+    """
+    Returns transpose of matrix m.
+    """
     ret = [
         vec4(m[0].x, m[1].x, m[2].x, m[3].x),
         vec4(m[0].y, m[1].y, m[2].y, m[3].y),
@@ -96,6 +116,9 @@ def transpose(m):
 
 
 def multiply(v, G):
+    """
+    Multiply vector v by matrix G
+    """
     result = []
     for i in range(len(G)):
         result.append(dot(v, G[i]))
@@ -103,6 +126,9 @@ def multiply(v, G):
 
 
 def cross(v1, v2):
+    """
+    Returns cross product of two vec3 v1, v2.
+    """
     if type(v1) != type(v2):
         raise ShapeError(v1, v2, "cross")
 
@@ -118,6 +144,9 @@ def cross(v1, v2):
 
 
 def normalize(v):
+    """
+    Normalizes vector v. Returns ||v||.
+    """
     if type(v) == vec3:
         raw = copy.deepcopy(v)
         raw = [raw.x, raw.y, raw.z]

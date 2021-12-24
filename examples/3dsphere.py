@@ -4,7 +4,7 @@ if __name__ == "__main__":
     sc = ConsoleTGX()
     camera = Camera(vec3(0, 15, 15))
     off = 0
-    sph = Sphere(0, 0, 0, 10, MODE="LINE")
+    sph = Sphere(vec4(0, 0, 0, 0), 10, MODE="LINE")
     try:
 
         # animation loop

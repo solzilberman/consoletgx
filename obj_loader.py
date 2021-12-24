@@ -1,12 +1,24 @@
 from shapes import *
 from linalg import *
 
+__docformat__ = "google"
+
 
 class ObjLoader:
+    """
+    Class for loading .obj files.
+    """
+
     def __init__(self):
         pass
 
     def read(self, filename, MODE="FILL"):
+        """
+        Loads .obj file from filepath and returns a list of triangles
+        Parameters:
+            filename : filepath of .obj file
+            MODE     : "FILL" or "LINE"
+        """
         with open(filename, "r") as f:
             data = f.read().splitlines()
 

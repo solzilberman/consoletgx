@@ -79,6 +79,8 @@ consoletgx    </h1>
 <span class="kn">from</span> <span class="nn">linalg</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">obj_loader</span> <span class="kn">import</span> <span class="o">*</span>
 
+<span class="n">__docformat__</span> <span class="o">=</span> <span class="s2">&quot;google&quot;</span>
+
 <span class="n">PI</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span>
 <span class="c1"># fmt: off</span>
 <span class="n">dots</span> <span class="o">=</span> <span class="p">((</span><span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">),</span>
@@ -89,6 +91,10 @@ consoletgx    </h1>
 
 
 <span class="k">class</span> <span class="nc">ConsoleTGX</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for controlling terminal display through ConsoleTGX object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="o">=</span> <span class="n">dots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">curses</span><span class="o">.</span><span class="n">initscr</span><span class="p">()</span>
@@ -113,7 +119,12 @@ consoletgx    </h1>
         <span class="bp">self</span><span class="o">.</span><span class="n">objs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">clear</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the screen with the contents of the buffers.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            s: seconds for update interval. 1/3 for 30fps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">nodelay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -129,16 +140,22 @@ consoletgx    </h1>
             <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears the screen and all buffers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mh">0x2800</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">COLOR_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">240</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">100</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">erase</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up method to exit the program.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">curses</span><span class="o">.</span><span class="n">endwin</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exit sig recieved!&quot;</span><span class="p">)</span>
 </pre></div>
@@ -158,6 +175,10 @@ consoletgx    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ConsoleTGX</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for controlling terminal display through ConsoleTGX object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dots</span> <span class="o">=</span> <span class="n">dots</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">curses</span><span class="o">.</span><span class="n">initscr</span><span class="p">()</span>
@@ -182,7 +203,12 @@ consoletgx    </h1>
         <span class="bp">self</span><span class="o">.</span><span class="n">objs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">clear</span>
 
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the screen with the contents of the buffers.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            s: seconds for update interval. 1/3 for 30fps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">nodelay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -198,23 +224,31 @@ consoletgx    </h1>
             <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears the screen and all buffers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mh">0x2800</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">COLOR_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">240</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">100</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">erase</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up method to exit the program.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">curses</span><span class="o">.</span><span class="n">endwin</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exit sig recieved!&quot;</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Class for controlling terminal display through ConsoleTGX object.</p>
+</div>
+
 
                             <div id="ConsoleTGX.__init__" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#ConsoleTGX.__init__">#&nbsp;&nbsp</a>
@@ -260,12 +294,17 @@ consoletgx    </h1>
 
         
             <span class="def">def</span>
-            <span class="name">update</span><span class="signature">(self, ms)</span>:
+            <span class="name">update</span><span class="signature">(self, s)</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ms</span><span class="p">):</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the screen with the contents of the buffers.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">            s: seconds for update interval. 1/3 for 30fps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">nodelay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -281,13 +320,21 @@ consoletgx    </h1>
             <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">return</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Updates the screen with the contents of the buffers.</p>
+
+<h6 id="parameters">Parameters</h6>
+
+<blockquote>
+  <p>s: seconds for update interval. 1/3 for 30fps.</p>
+</blockquote>
+</div>
+
 
                             </div>
                             <div id="ConsoleTGX.clear" class="classattr">
@@ -301,6 +348,9 @@ consoletgx    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears the screen and all buffers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mh">0x2800</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">COLOR_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">240</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DEPTH_BUFFER</span> <span class="o">=</span> <span class="p">[[</span><span class="o">-</span><span class="mi">100</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
@@ -309,7 +359,9 @@ consoletgx    </h1>
 
         </details>
 
-    
+            <div class="docstring"><p>Clears the screen and all buffers.</p>
+</div>
+
 
                             </div>
                             <div id="ConsoleTGX.exit" class="classattr">
@@ -323,13 +375,18 @@ consoletgx    </h1>
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clean up method to exit the program.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">curses</span><span class="o">.</span><span class="n">endwin</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;exit sig recieved!&quot;</span><span class="p">)</span>
 </pre></div>
 
         </details>
 
-    
+            <div class="docstring"><p>Clean up method to exit the program.</p>
+</div>
+
 
                             </div>
                 </section>

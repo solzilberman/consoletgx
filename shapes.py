@@ -3,17 +3,27 @@ import math
 from linalg import *
 from camera import *
 
+__docformat__ = "google"
+
 
 def euclid_distance(p1, p2):
-    # return euclidian distance between 2 3d points
+    """
+    return euclidian distance between 2 3d points
+    """
     return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2 + (p1.z - p2.z) ** 2)
 
 
 def area_triangle(p1, p2, p3):
+    """
+    Finds area of a triangle
+    """
     return abs((p1.x * p2.y + p2.x * p3.y + p3.x * p1.y - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x) / 2)
 
 
 def lighting(p, normal, light_pos=vec4(0, 15, 0, 0)):
+    """
+    Calculates lighting based on vertex position, normal and light position
+    """
     # https://www.scratchapixel.com/code.php?id=26&origin=/lessons/3d-basic-rendering/rasterization-practical-implementation
     light_dir = normalize(light_pos - p)
     diff = max(0, dot(normal, light_dir))
@@ -22,6 +32,9 @@ def lighting(p, normal, light_pos=vec4(0, 15, 0, 0)):
 
 
 def _rasterize(p, sc, cam):
+    """
+    Converts point from camera space to screen space
+    """
     f = 100
     n = 1
     scale = math.tan(75 * 0.5 / 180 * math.pi) * n
@@ -49,6 +62,9 @@ def _rasterize(p, sc, cam):
 
 
 def _to_screen_space(p, sc):
+    """
+    Converts from camera space to screen space
+    """
     half_w = sc.bwidth / 2
     half_h = sc.bheight / 2
     x_screen = max(0, min(sc.bwidth - 1, p.x * half_w + half_w))
@@ -57,6 +73,9 @@ def _to_screen_space(p, sc):
 
 
 def _line_factory(p1, p2):
+    """
+    Returns array of points on the line between [p1,p2]
+    """
     x1, x2 = int(round(p1.x)), int(round(p2.x))
     y1, y2 = int(round(p1.y)), int(round(p2.y))
     xd = max(x1, x2) - min(x1, x2)
@@ -77,6 +96,9 @@ def _line_factory(p1, p2):
 
 
 def _inside_triangle(p, p1, p2, p3):
+    """
+    Checks if a point is inside a triangle
+    """
     # https://en.wikipedia.org/wiki/Barycentric_coordinate_system
     w1 = ((p2.y - p3.y) * (p.x - p3.x) + (p3.x - p2.x) * (p.y - p3.y)) / (
         (p2.y - p3.y) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.y - p3.y)
@@ -89,11 +111,30 @@ def _inside_triangle(p, p1, p2, p3):
 
 
 class Point:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    """
+    2D Point representing pixel in screen space
+    Attributes:
+        x,y : coordinates of point
+        (OR)
+        v   : vec2, vec3, vec4 where v.x, v.y are coordinates in screen space
+    """
+
+    def __init__(self, *argv):
+        if len(argv) == 2:
+            self.x = argv[0]
+            self.y = argv[1]
+        else:
+            self.x = argv[0].x
+            self.y = argv[0].y
 
     def draw(self, sc, col=0, depth=0):
+        """
+        Draw point at self.x, self.y in terminal
+        Parameters:
+            sc               : screen object
+            (optional) col   : color of point
+            (optional) depth : depth of 3d point
+        """
         self.x = max(0, min(self.x, sc.bwidth - 1))
         self.y = max(0, min(self.y, sc.bheight - 1))
         if depth >= sc.DEPTH_BUFFER[int(self.y // 4)][int(self.x // 2)]:
@@ -207,6 +248,14 @@ class Point3:
 
 
 class Triangle3:
+    """
+    3D Triangle class
+    Attributes:
+        p1, p2, p3: vec4 vertices of triangle
+        normal: vec4 normal of triangle
+        MODE: drawing mode, "FILL" or "LINE"
+    """
+
     def __init__(self, p1, p2, p3, normal=vec4(0, 0, 0, 0), MODE="FILL"):
         self.p1 = p1
         self.p2 = p2
@@ -215,7 +264,12 @@ class Triangle3:
         self.normal = normal
 
     def draw(self, sc, c):
-
+        """
+        Draws the triangle on the screen
+        Parameters:
+            sc : screen object
+            c  : camera object
+        """
         # world space -> camera space
         v1 = multiply(self.p1, transpose(c.get_view()))
         v2 = multiply(self.p2, transpose(c.get_view()))
@@ -263,6 +317,9 @@ class Triangle3:
                         pcurr.draw(sc, diff, z)
 
     def rotate(self, theta, axis):
+        """
+        Rotates self.p1, self.p2,self.p3 around axis by theta
+        """
         axis = axis.lower()
         if axis == "y":
             self.p1 = rotateY(self.p1, theta)
@@ -291,14 +348,29 @@ class Triangle3:
 
 
 class Sphere:
-    def __init__(self, cx, cy, cz, radius, MODE="FILL"):
-        self.cx = cx
-        self.cy = cy
-        self.cz = cz
+    """
+    3D Sphere Object
+    Attributes:
+        center : center of the sphere
+        radius : radius of the sphere
+        MODE   : mode of drawing, "FILL" or "LINE
+    """
+
+    def __init__(self, c, radius, MODE="FILL"):
+        self.cx = c.x
+        self.cy = c.y
+        self.cz = c.z
+        self.cw = c.w
         self.radius = radius
         self.MODE = MODE
 
     def draw(self, sc, c):
+        """
+        Draws the sphere on the screen
+        Parameters:
+            sc : screen object
+            c  : camera object
+        """
         # world space -> camera space
         # http://www.songho.ca/opengl/gl_sphere.html
         sector_count = 50
