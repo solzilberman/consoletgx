@@ -2,10 +2,34 @@ import copy
 import math
 
 
+class ShapeError(Exception):
+    def __init__(self, a, b, f):
+        """
+        Thrown on shape mismatch during operation
+        """
+        self.a = a
+        self.b = b
+
+    def __str__(self):
+        return f"ShapeError: {self.a.dim} != {self.b.dim}"
+
+
 class vec2:
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
+
+    def __add__(self, other):
+        """
+        returns self.m + other.m
+        """
+        return vec2(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        """
+        returns self.m - other.m
+        """
+        return vec2(self.x - other.x, self.y - other.y)
 
 
 class vec3:
@@ -14,6 +38,7 @@ class vec3:
         self.y = y
         self.z = z
         self.dim = 3
+        self.xy = vec2(self.x, self.y)
 
     def __add__(self, other):
         """
@@ -35,6 +60,8 @@ class vec4:
         self.z = z
         self.w = w
         self.dim = 4
+        self.xyz = vec3(self.x, self.y, self.z)
+        self.xy = vec2(self.x, self.y)
 
     def __add__(self, other):
         """
@@ -50,6 +77,8 @@ class vec4:
 
 
 def dot(v1, v2):
+    if v1.dim != v2.dim:
+        raise ShapeError(v1, v2, "dot")
     if v1.dim == 4:
         return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w
     elif v1.dim == 3:
@@ -74,6 +103,9 @@ def multiply(v, G):
 
 
 def cross(v1, v2):
+    if type(v1) != type(v2):
+        raise ShapeError(v1, v2, "cross")
+
     a = [v1.x, v1.y, v1.z]
     b = [v2.x, v2.y, v2.z]
     c = [
@@ -82,7 +114,7 @@ def cross(v1, v2):
         a[0] * b[1] - a[1] * b[0],
     ]
 
-    return vec3(c[0], c[1], c[2])
+    return vec3(c[0], c[1], c[2]) if v1.dim == 3 else vec4(c[0], c[1], c[2], 0)
 
 
 def normalize(v):
@@ -102,8 +134,28 @@ def normalize(v):
         return vec4(raw[0] / lenv, raw[1] / lenv, raw[2] / lenv, raw[3] / lenv)
 
 
+def rotateX(v, angle):
+    """Rotates the point around the X axis by the given angle in degrees."""
+    rad = angle * math.pi / 180
+    cosa = math.cos(rad)
+    sina = math.sin(rad)
+    y = v.y * cosa - v.z * sina
+    z = v.y * sina + v.z * cosa
+    return vec4(v.x, y, z, v.w)
+
+
 def rotateY(v, angle):
     """Rotates the point around the Y axis by the given angle in degrees."""
+    rad = angle * math.pi / 180
+    cosa = math.cos(rad)
+    sina = math.sin(rad)
+    x = v.x * cosa - v.y * sina
+    y = v.x * sina + v.y * cosa
+    return vec4(x, y, v.z, v.w)
+
+
+def rotateZ(v, angle):
+    """Rotates the point around the Z axis by the given angle in degrees."""
     rad = angle * math.pi / 180
     cosa = math.cos(rad)
     sina = math.sin(rad)

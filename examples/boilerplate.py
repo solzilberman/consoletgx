@@ -17,5 +17,4 @@ if __name__ == "__main__":
                 raise KeyboardInterrupt
 
     except KeyboardInterrupt:
-        curses.endwin()
-        print("exit sig recieved!")
+        sc.exit()  # exit on ctrl-c

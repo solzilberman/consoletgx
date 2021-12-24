@@ -1,12 +1,12 @@
 #!/usr/bin/python
-import curses, random
+import curses
 import time
 import random
-from shapes import *
 import math
+from shapes import *
 from camera import *
 from linalg import *
-
+from obj_loader import *
 
 PI = math.pi
 # fmt: off
@@ -29,8 +29,8 @@ class ConsoleTGX:
         self.bsize = self.bwidth * self.bheight
         self.fill = 3
         self.BUFFER = [[0x2800 for _ in range(self.width)] for _ in range(self.height)]
-        self.COLOR_BUFFER = [[0 for _ in range(self.width)] for _ in range(self.height)]
-        self.DEPTH_BUFFER = [[100 for _ in range(self.width)] for _ in range(self.height)]
+        self.COLOR_BUFFER = [[240 for _ in range(self.width)] for _ in range(self.height)]
+        self.DEPTH_BUFFER = [[-100 for _ in range(self.width)] for _ in range(self.height)]
         self.bg_color = 0
         curses.curs_set(0)
         curses.start_color()
@@ -63,6 +63,10 @@ class ConsoleTGX:
 
     def clear(self):
         self.BUFFER = [[0x2800 for _ in range(self.width)] for _ in range(self.height)]
-        self.COLOR_BUFFER = [[0 for _ in range(self.width)] for _ in range(self.height)]
-        self.DEPTH_BUFFER = [[100 for _ in range(self.width)] for _ in range(self.height)]
+        self.COLOR_BUFFER = [[240 for _ in range(self.width)] for _ in range(self.height)]
+        self.DEPTH_BUFFER = [[-100 for _ in range(self.width)] for _ in range(self.height)]
         self.screen.erase()
+
+    def exit(self):
+        curses.endwin()
+        print("exit sig recieved!")

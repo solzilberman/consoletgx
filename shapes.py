@@ -4,17 +4,21 @@ from linalg import *
 from camera import *
 
 
+def euclid_distance(p1, p2):
+    # return euclidian distance between 2 3d points
+    return math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2 + (p1.z - p2.z) ** 2)
+
+
 def area_triangle(p1, p2, p3):
     return abs((p1.x * p2.y + p2.x * p3.y + p3.x * p1.y - p1.y * p2.x - p2.y * p3.x - p3.y * p1.x) / 2)
 
 
-def lighting(p, normal, light_pos=vec4(15, 15, 15, 0)):
+def lighting(p, normal, light_pos=vec4(0, 15, 0, 0)):
     # https://www.scratchapixel.com/code.php?id=26&origin=/lessons/3d-basic-rendering/rasterization-practical-implementation
-    temp_light = light_pos
-    light_dir = normalize(temp_light - p)
+    light_dir = normalize(light_pos - p)
     diff = max(0, dot(normal, light_dir))
-    diff = round((diff - 0) / (1) * (255 - 240) + 240)
-    return diff
+    print(p.x, p.y, p.z)
+    return round((diff - 0) / (1) * (255 - 240) + 240)
 
 
 def _rasterize(p, sc, cam):
@@ -92,9 +96,9 @@ class Point:
     def draw(self, sc, col=0, depth=0):
         self.x = max(0, min(self.x, sc.bwidth - 1))
         self.y = max(0, min(self.y, sc.bheight - 1))
-        # if depth <= sc.DEPTH_BUFFER[int(self.y // 4)][int(self.x // 2)]:
-        sc.DEPTH_BUFFER[int(self.y // 4)][int(self.x // 2)] = depth
-        sc.COLOR_BUFFER[int(self.y // 4)][int(self.x // 2)] = col
+        if depth >= sc.DEPTH_BUFFER[int(self.y // 4)][int(self.x // 2)]:
+            sc.DEPTH_BUFFER[int(self.y // 4)][int(self.x // 2)] = depth
+            sc.COLOR_BUFFER[int(self.y // 4)][int(self.x // 2)] = col
         sc.BUFFER[int(self.y // 4)][int(self.x // 2)] |= sc.dots[int(self.y) % 4][int(self.x) % 2]
 
 
@@ -190,10 +194,10 @@ class Polygon:
 
 
 class Point3:
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
+    def __init__(self, v):
+        self.x = v.x
+        self.y = v.y
+        self.z = v.z
 
     def draw(self, sc, col=0):
         x_screen = self.x
@@ -217,20 +221,19 @@ class Triangle3:
         v2 = multiply(self.p2, transpose(c.get_view()))
         v3 = multiply(self.p3, transpose(c.get_view()))
         # camera space -> pixel space
-        v1 = _rasterize(v1, sc, c)
-        v2 = _rasterize(v2, sc, c)
-        v3 = _rasterize(v3, sc, c)
-        v1.z = 1 / v1.z
-        v2.z = 1 / v2.z
-        v3.z = 1 / v3.z
+        vp1 = _rasterize(v1, sc, c)
+        vp2 = _rasterize(v2, sc, c)
+        vp3 = _rasterize(v3, sc, c)
+        vp1.z = 1 / vp1.z
+        vp2.z = 1 / vp2.z
+        vp3.z = 1 / vp3.z
 
-        ps1 = v1
-        ps2 = v2
-        ps3 = v3
+        ps1 = vp1
+        ps2 = vp2
+        ps3 = vp3
         area = area_triangle(ps1, ps2, ps3)
         # shade
-        temp_light = vec4(0, 15, 0, 0)
-        light_dir = normalize(temp_light - self.p1)
+        light_dir = normalize(c.get_light() - self.p1)
         diff = max(0, dot(self.normal, light_dir))
         diff = round((diff - 0) / (1) * (255 - 240) + 240)
 
@@ -256,25 +259,35 @@ class Triangle3:
                         nw1 = w1 / area
                         nw2 = w2 / area
                         nw3 = w3 / area
-                        z = 1 / (nw1 * v1.z + nw2 * v2.z + nw3 * v3.z)
+                        z = -1 / (nw1 * ps1.z + nw2 * ps2.z + nw3 * ps3.z)
                         pcurr.draw(sc, diff, z)
 
     def rotate(self, theta, axis):
+        axis = axis.lower()
         if axis == "y":
-            rad = theta * math.pi / 180
-            cosa = math.cos(rad)
-            sina = math.sin(rad)
-            z = self.p1.z * cosa - self.p1.x * sina
-            x = self.p1.z * sina + self.p1.x * cosa
-            self.p1 = vec4(x, self.p1.y, z, self.p1.w)
+            self.p1 = rotateY(self.p1, theta)
+            self.p2 = rotateY(self.p2, theta)
+            self.p3 = rotateY(self.p3, theta)
+            self.normal = rotateY(self.normal, theta)
+        elif axis == "x":
+            self.p1 = rotateX(self.p1, theta)
+            self.p2 = rotateX(self.p2, theta)
+            self.p3 = rotateX(self.p3, theta)
+        elif axis == "z":
+            self.p1 = rotateZ(self.p1, theta)
+            self.p2 = rotateZ(self.p2, theta)
+            self.p3 = rotateZ(self.p3, theta)
 
-            z = self.p2.z * cosa - self.p2.x * sina
-            x = self.p2.z * sina + self.p2.x * cosa
-            self.p2 = vec4(x, self.p2.y, z, self.p2.w)
-
-            z = self.p3.z * cosa - self.p3.x * sina
-            x = self.p3.z * sina + self.p3.x * cosa
-            self.p3 = vec4(x, self.p3.y, z, self.p3.w)
+    def scale(self, factor):
+        self.m = [
+            vec4(factor, 0, 0, 0),
+            vec4(0, factor, 0, 0),
+            vec4(0, 0, factor, 0),
+            vec4(0, 0, 0, 1),
+        ]
+        self.p1 = multiply(self.p1, self.m)
+        self.p2 = multiply(self.p2, self.m)
+        self.p3 = multiply(self.p3, self.m)
 
 
 class Sphere:

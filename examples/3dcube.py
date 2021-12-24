@@ -3,6 +3,7 @@ from consoletgx import *
 if __name__ == "__main__":
     sc = ConsoleTGX()
     camera = Camera(vec3(0, 15, 15))
+    camera.light_pos = vec4(-5, 15, 0, 0)
     off = 0
     try:
         with open("./examples/cube.obj", "r") as f:
@@ -23,7 +24,7 @@ if __name__ == "__main__":
 
             # calculate normal given 3 points in curr
             n = normalize(cross(curr[1] - curr[0], curr[2] - curr[0]))
-            tri.append(Triangle3(curr[0], curr[1], curr[2], normal=n, MODE="LINE"))
+            tri.append(Triangle3(curr[0], curr[1], curr[2], normal=n, MODE="FILL"))
 
         off = 15
 
@@ -39,7 +40,8 @@ if __name__ == "__main__":
             if c == 3:
                 raise KeyboardInterrupt
             elif c == 259:
-                camera.translate(vec3(0, 0, 5))
+                # camera.translate(vec3(0, 0, 5))
+                camera.translate_light(vec4(0, 0, 3, 0))
                 # camera.get_view(debug=True)
     except KeyboardInterrupt:
         curses.endwin()

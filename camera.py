@@ -35,9 +35,15 @@ class Camera:
             print("=================================================================")
         return self.view
 
-    def move_light(self, v):
+    def translate_light(self, v):
         self.light_pos += v
 
-    def translate(self, v4):
+    def translate_eye(self, v4):
         self.eye += v4
         self.look_at(self.target)
+
+    def get_eye(self):
+        return self.eye
+
+    def get_light(self):
+        return self.light_pos
