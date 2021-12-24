@@ -37,7 +37,25 @@ if __name__ == "__main__":
 ```
 
 Examples:
+
+Spinning Cube
+
 ![Spinning Cube](https://i.imgur.com/BIxVB1f.gif)
+
+Sphere + Basic Lighting Model
 
 ![Sphere with lighting](https://i.imgur.com/zA7iDcJ.gif)
 
+
+**Important Notice** </br>
+This has only been tested on windows 10 machine running in windows terminal.</br>
+</br>
+**Dependencies:**</br>
+[python curses](https://docs.python.org/3/howto/curses.html)</br>
+</br>
+**REFERENCES**</br>
+[Braille Patterns](https://en.wikipedia.org/wiki/Braille_Patterns)</br>
+[Perspective Projection](https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrices-what-you-need-to-know-first)</br>
+[Rasterization](https://www.scratchapixel.com/lessons/3d-basic-rendering/rasterization-practical-implementation)</br>
+[OpenGL Camera](http://www.songho.ca/opengl/gl_camera.html)</br>
+[Similair Project: Drawville 2d Terminal Engine](https://github.com/asciimoo/drawille)</br>
