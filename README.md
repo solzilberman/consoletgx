@@ -35,7 +35,7 @@ if __name__ == "__main__":
         print("exit sig recieved!")
 
 ```
-**Documentation:** [docs](solzilberman.github.io/consoletgx)</br>
+**Documentation:** [docs](https://solzilberman.github.io/consoletgx/)</br>
 </br>
 
 **Examples:**
